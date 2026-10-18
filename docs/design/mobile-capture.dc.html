@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mobile quick capture</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=Lexend:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="position:relative; width:390px; height:844px; overflow:hidden; display:flex; flex-direction:column; background:#F1F2EE; color:#1C211F; font-family:'Atkinson Hyperlegible', Verdana, system-ui, sans-serif; font-size:16px; line-height:1.5">
+
+<div style="flex:1 1 auto; min-height:0; overflow-y:auto; padding:60px 20px 120px; box-sizing:border-box; display:flex; flex-direction:column; gap:22px">
+
+<sc-if value="{{ isCapture }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex; flex-direction:column; gap:22px">
+<div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+<h1 style="margin:0; display:flex; align-items:center; gap:10px; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:600; font-size:24px; line-height:1.2">
+<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="1" y="1" width="9" height="9" rx="2.5" fill="#1C211F"></rect><rect x="12" y="1" width="9" height="9" rx="2.5" fill="#2B44C0"></rect><rect x="1.75" y="12.75" width="7.5" height="7.5" rx="2" fill="none" stroke="#1C211F" stroke-width="1.5"></rect><rect x="12.75" y="12.75" width="7.5" height="7.5" rx="2" fill="none" stroke="#1C211F" stroke-width="1.5"></rect></svg>
+<span>Capture</span>
+</h1>
+<span style="display:inline-flex; align-items:center; gap:6px; min-height:30px; padding:0 10px; border-radius:999px; background:#E4E7E0; font-size:13px"><span aria-hidden="true" style="width:8px; height:8px; border-radius:999px; background:#2B44C0"></span><span>Synced to web</span></span>
+</div>
+
+<div style="display:flex; flex-direction:column; gap:6px; padding:16px 18px; border:2px solid #1C211F; border-radius:22px; background:#FBFBF9; box-shadow:6px 6px 0 #1C211F">
+<label for="captureMobile" style="font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:500; font-size:15px; color:#4E5753">What's on your mind?</label>
+<textarea id="captureMobile" rows="3" placeholder="Type it before it slips away" value="{{ text }}" onChange="{{ onType }}" onKeyDown="{{ onKey }}" style="width:100%; min-height:112px; box-sizing:border-box; padding:0; border:0; outline:none; resize:none; background:transparent; color:#1C211F; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:500; font-size:22px; line-height:1.35"></textarea>
+</div>
+
+<div style="display:flex; flex-direction:column; gap:8px">
+<p style="margin:0; font-size:14px; color:#4E5753">Optional. You can sort it properly on the web.</p>
+<div role="group" aria-label="Optional tags" style="display:flex; flex-wrap:wrap; gap:8px">
+<sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+<button type="button" aria-pressed="{{ c.pressed }}" onClick="{{ c.toggle }}" style="min-height:44px; padding:0 16px; border-radius:999px; border:1.5px solid {{ c.border }}; background:{{ c.bg }}; color:{{ c.color }}; font-family:'Atkinson Hyperlegible', Verdana, system-ui, sans-serif; font-size:15px; cursor:pointer">{{ c.label }}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="display:flex; flex-direction:column; gap:8px">
+<div style="display:flex; gap:10px">
+<button type="button" aria-label="Capture by voice" onClick="{{ startVoice }}" style="flex:none; display:flex; align-items:center; justify-content:center; width:60px; height:60px; padding:0; border:2px solid #1C211F; border-radius:18px; background:#FBFBF9; color:#1C211F; cursor:pointer"><svg width="24" height="24" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="5.5" y="1.5" width="5" height="8" rx="2.5"></rect><path d="M3 7.5a5 5 0 0 0 10 0M8 12.5V15"></path></svg></button>
+<button type="button" disabled="{{ cantSave }}" onClick="{{ save }}" style="flex:1 1 auto; display:flex; align-items:center; justify-content:center; gap:8px; min-height:60px; border:0; border-radius:18px; background:{{ saveBg }}; color:{{ saveColor }}; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:600; font-size:18px; cursor:pointer"><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3.4 2.8h9.2L14.5 9v4.2h-13V9z"></path><path d="M1.5 9h3.8l1 1.8h3.4l1-1.8h3.8"></path></svg><span>Save to inbox</span></button>
+</div>
+<p style="margin:0; font-size:14px; color:#4E5753">The Return key saves too.</p>
+</div>
+
+<section aria-labelledby="recentMobile" style="display:flex; flex-direction:column; gap:10px">
+<div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+<h2 id="recentMobile" style="margin:0; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:600; font-size:17px">Recently captured</h2>
+<button type="button" onClick="{{ toInbox }}" style="min-height:44px; padding:0 4px; border:0; background:transparent; color:#2B44C0; font-family:'Atkinson Hyperlegible', Verdana, system-ui, sans-serif; font-size:15px; font-weight:700; cursor:pointer">See all {{ count }}</button>
+</div>
+<sc-if value="{{ noRecent }}" hint-placeholder-val="{{ false }}">
+<p style="margin:0; color:#4E5753; font-size:15px">Nothing yet. Your first thought will land here.</p>
+</sc-if>
+<ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px">
+<sc-for list="{{ recent }}" as="r" hint-placeholder-count="2">
+<li style="display:flex; flex-direction:column; gap:6px; padding:12px 14px; border-radius:14px; border:1px solid {{ r.border }}; background:{{ r.bg }}">
+<span style="font-size:16px; line-height:1.35">{{ r.text }}</span>
+<span style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; color:#4E5753; font-size:13px">
+<span>{{ r.time }}</span>
+<sc-for list="{{ r.tags }}" as="tg" hint-placeholder-count="1">
+<span style="display:inline-flex; align-items:center; padding:1px 8px; border-radius:999px; background:#E4E7E0; color:#1C211F">{{ tg }}</span>
+</sc-for>
+</span>
+</li>
+</sc-for>
+</ul>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{ isInbox }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex; flex-direction:column; gap:20px">
+<div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+<h1 style="margin:0; display:flex; align-items:center; gap:10px; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:600; font-size:24px; line-height:1.2"><span>Inbox</span><span style="display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:28px; padding:0 8px; box-sizing:border-box; border-radius:999px; background:#2B44C0; color:#FFFFFF; font-family:'Atkinson Hyperlegible', Verdana, system-ui, sans-serif; font-size:15px; font-weight:700">{{ count }}</span></h1>
+<span style="display:inline-flex; align-items:center; gap:6px; min-height:30px; padding:0 10px; border-radius:999px; background:#E4E7E0; font-size:13px"><span aria-hidden="true" style="width:8px; height:8px; border-radius:999px; background:#2B44C0"></span><span>Synced to web</span></span>
+</div>
+<div style="display:flex; gap:12px; padding:14px 16px; border-radius:16px; background:#E3E7F8; color:#22358F; font-size:15px; line-height:1.45">
+<svg width="20" height="20" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" style="flex:none; margin-top:1px"><rect x="1.5" y="2.5" width="13" height="8.5" rx="1.5"></rect><path d="M5.5 14h5M8 11v3"></path></svg>
+<span>These wait in To sort on your web matrix. Sort them there when you're at your desk.</span>
+</div>
+<sc-if value="{{ inboxEmpty }}" hint-placeholder-val="{{ false }}">
+<p style="margin:0; color:#4E5753; font-size:16px">Inbox is clear. Nothing waiting to be sorted.</p>
+</sc-if>
+<sc-if value="{{ hasToday }}" hint-placeholder-val="{{ true }}">
+<section aria-labelledby="todayMobile" style="display:flex; flex-direction:column; gap:8px">
+<h2 id="todayMobile" style="margin:0; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:600; font-size:16px; color:#4E5753">Today</h2>
+<ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px">
+<sc-for list="{{ todayItems }}" as="it" hint-placeholder-count="1">
+<li style="display:flex; flex-direction:column; gap:6px; padding:14px 16px; border-radius:14px; border:1px solid #D6D9D2; background:#FBFBF9">
+<span style="font-size:17px; line-height:1.35">{{ it.text }}</span>
+<span style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; color:#4E5753; font-size:13px">
+<span>{{ it.time }}</span>
+<sc-for list="{{ it.tags }}" as="tg" hint-placeholder-count="1">
+<span style="display:inline-flex; align-items:center; padding:1px 8px; border-radius:999px; background:#E4E7E0; color:#1C211F">{{ tg }}</span>
+</sc-for>
+</span>
+</li>
+</sc-for>
+</ul>
+</section>
+</sc-if>
+<sc-if value="{{ hasEarlier }}" hint-placeholder-val="{{ true }}">
+<section aria-labelledby="earlierMobile" style="display:flex; flex-direction:column; gap:8px">
+<h2 id="earlierMobile" style="margin:0; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:600; font-size:16px; color:#4E5753">Earlier</h2>
+<ul style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px">
+<sc-for list="{{ earlierItems }}" as="it" hint-placeholder-count="1">
+<li style="display:flex; flex-direction:column; gap:6px; padding:14px 16px; border-radius:14px; border:1px solid #D6D9D2; background:#FBFBF9">
+<span style="font-size:17px; line-height:1.35">{{ it.text }}</span>
+<span style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; color:#4E5753; font-size:13px">
+<span>{{ it.time }}</span>
+<sc-for list="{{ it.tags }}" as="tg" hint-placeholder-count="1">
+<span style="display:inline-flex; align-items:center; padding:1px 8px; border-radius:999px; background:#E4E7E0; color:#1C211F">{{ tg }}</span>
+</sc-for>
+</span>
+</li>
+</sc-for>
+</ul>
+</section>
+</sc-if>
+</div>
+</sc-if>
+
+</div>
+
+<sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
+<div role="status" style="position:absolute; left:16px; right:16px; bottom:108px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:6px 6px 6px 18px; border-radius:16px; background:#1C211F; color:#FFFFFF; font-size:16px; box-shadow:0 10px 28px rgba(28,33,31,0.28)">
+<span style="display:flex; align-items:center; gap:10px"><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.2 3.2L13 4.8"></path></svg><span>Saved to inbox</span></span>
+<button type="button" onClick="{{ undo }}" style="min-height:44px; padding:0 14px; border:0; border-radius:10px; background:transparent; color:#B9C4F5; font-family:'Atkinson Hyperlegible', Verdana, system-ui, sans-serif; font-size:16px; font-weight:700; text-decoration:underline; text-underline-offset:3px; cursor:pointer">Undo</button>
+</div>
+</sc-if>
+
+<nav aria-label="Sections" style="position:absolute; left:0; right:0; bottom:0; display:flex; gap:8px; padding:8px 16px 28px; border-top:1px solid #D6D9D2; background:#FBFBF9">
+<button type="button" aria-current="{{ capAria }}" onClick="{{ toCapture }}" style="flex:1 1 0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-height:56px; border:0; border-radius:14px; background:{{ tabCapBg }}; color:{{ tabCapColor }}; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:500; font-size:13px; cursor:pointer"><svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 13.5l1-3.6 7.2-7.2a1.4 1.4 0 0 1 2 0l.6.6a1.4 1.4 0 0 1 0 2l-7.2 7.2z"></path><path d="M9.5 3.9l2.6 2.6"></path></svg><span>Capture</span></button>
+<button type="button" aria-current="{{ inAria }}" onClick="{{ toInbox }}" style="flex:1 1 0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-height:56px; border:0; border-radius:14px; background:{{ tabInBg }}; color:{{ tabInColor }}; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:500; font-size:13px; cursor:pointer"><span style="position:relative; display:flex"><svg width="22" height="22" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M3.4 2.8h9.2L14.5 9v4.2h-13V9z"></path><path d="M1.5 9h3.8l1 1.8h3.4l1-1.8h3.8"></path></svg><span style="position:absolute; top:-6px; right:-14px; display:inline-flex; align-items:center; justify-content:center; min-width:20px; height:20px; padding:0 5px; box-sizing:border-box; border-radius:999px; background:#2B44C0; color:#FFFFFF; font-family:'Atkinson Hyperlegible', Verdana, system-ui, sans-serif; font-size:12px; font-weight:700">{{ count }}</span></span><span>Inbox</span></button>
+</nav>
+
+<sc-if value="{{ listening }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; background:rgba(28,33,31,0.45)">
+<div role="dialog" aria-label="Voice capture" style="display:flex; flex-direction:column; gap:22px; padding:28px 24px 40px; border-radius:28px 28px 0 0; background:#1C211F; color:#FFFFFF">
+<p style="margin:0; display:flex; align-items:center; gap:10px; color:#D7DBD3; font-size:15px"><span aria-hidden="true" style="width:10px; height:10px; border-radius:999px; background:#8FA2FF"></span><span>{{ voiceStatus }}</span></p>
+<div aria-hidden="true" style="display:flex; align-items:center; gap:5px; height:48px">
+<span style="width:5px; height:14px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:26px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:40px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:22px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:34px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:46px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:30px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:18px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:38px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:44px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:24px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:32px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:16px; border-radius:3px; background:#8FA2FF"></span>
+<span style="width:5px; height:28px; border-radius:3px; background:#8FA2FF"></span>
+</div>
+<p style="margin:0; min-height:64px; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:500; font-size:24px; line-height:1.3; color:{{ heardColor }}">{{ heardText }}</p>
+<div style="display:flex; gap:10px">
+<button type="button" onClick="{{ cancelVoice }}" style="flex:1 1 0; min-height:56px; border:1.5px solid #FFFFFF; border-radius:16px; background:transparent; color:#FFFFFF; font-family:'Atkinson Hyperlegible', Verdana, system-ui, sans-serif; font-size:16px; cursor:pointer">Cancel</button>
+<button type="button" disabled="{{ noHeard }}" onClick="{{ saveVoice }}" style="flex:2 1 0; min-height:56px; border:0; border-radius:16px; background:{{ voiceSaveBg }}; color:#FFFFFF; font-family:'Lexend', 'Segoe UI', system-ui, sans-serif; font-weight:600; font-size:17px; cursor:pointer">Save to inbox</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"start":{"editor":"enum","options":["capture","saved","inbox","voice"],"default":"capture"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = { touched: false };
+    this.toastTimer = null;
+    this.voiceTimer = null;
+  }
+
+  componentWillUnmount() {
+    if (this.toastTimer) clearTimeout(this.toastTimer);
+    if (this.voiceTimer) clearTimeout(this.voiceTimer);
+  }
+
+  seed() {
+    const start = (this.props && this.props.start) || 'capture';
+    const ali = { id: 'a1', text: 'Talk to Ali T about Ignite Marketplace Resources', time: 'Earlier', tags: ['Ignite Internal'], group: 'earlier' };
+    const chetan = { id: 'c1', text: 'Ask Chetan for the DR update', time: 'Just now', tags: ['Today'], group: 'today' };
+    const base = { touched: false, screen: 'capture', text: '', items: [ali], toastId: '', listening: false, heard: '', when: '', energy: '', lastText: '', lastWhen: '', lastEnergy: '' };
+    if (start === 'saved') {
+      return Object.assign({}, base, { items: [chetan, ali], toastId: 'c1', lastText: 'Ask Chetan for the DR update', lastWhen: 'Today' });
+    }
+    if (start === 'inbox') {
+      return Object.assign({}, base, { screen: 'inbox', items: [Object.assign({}, chetan, { time: '10:02 am' }), ali] });
+    }
+    if (start === 'voice') {
+      return Object.assign({}, base, { listening: true, heard: 'Ask Chetan for the DR update' });
+    }
+    return base;
+  }
+
+  cur() {
+    return (this.state && this.state.touched) ? this.state : this.seed();
+  }
+
+  upd(changes) {
+    this.setState(Object.assign({}, this.cur(), changes, { touched: true }));
+  }
+
+  armToast(id) {
+    if (this.toastTimer) clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => {
+      const c = this.cur();
+      if (c.toastId === id) this.upd({ toastId: '' });
+    }, 5000);
+  }
+
+  addItem(text, extra) {
+    const c = this.cur();
+    const tags = [c.when, c.energy].filter(Boolean);
+    const item = { id: 'n' + Date.now(), text: text, time: 'Just now', tags: tags, group: 'today' };
+    this.upd(Object.assign({
+      items: [item].concat(c.items || []),
+      toastId: item.id,
+      lastText: text,
+      lastWhen: c.when || '',
+      lastEnergy: c.energy || '',
+      text: '',
+      when: '',
+      energy: ''
+    }, extra || {}));
+    this.armToast(item.id);
+  }
+
+  save() {
+    const text = (this.cur().text || '').trim();
+    if (text) this.addItem(text);
+  }
+
+  renderVals() {
+    const c = this.cur();
+    const items = c.items || [];
+    const CHIPS = [
+      { label: 'Today', group: 'when' },
+      { label: 'This week', group: 'when' },
+      { label: 'Quick win', group: 'energy' },
+      { label: 'Deep focus', group: 'energy' }
+    ];
+    const chips = CHIPS.map((ch) => {
+      const on = c[ch.group] === ch.label;
+      return {
+        label: ch.label,
+        pressed: on ? 'true' : 'false',
+        bg: on ? '#2B44C0' : '#FBFBF9',
+        color: on ? '#FFFFFF' : '#1C211F',
+        border: on ? '#2B44C0' : '#C5CAC2',
+        toggle: () => {
+          const now = this.cur();
+          const change = {};
+          change[ch.group] = now[ch.group] === ch.label ? '' : ch.label;
+          this.upd(change);
+        }
+      };
+    });
+
+    const row = (it) => ({ text: it.text, time: it.time, tags: it.tags || [] });
+    const recent = items.slice(0, 3).map((it) => {
+      const fresh = it.id === c.toastId;
+      return Object.assign(row(it), {
+        bg: fresh ? '#E3E7F8' : '#FBFBF9',
+        border: fresh ? '#2B44C0' : '#D6D9D2'
+      });
+    });
+    const todayItems = items.filter((it) => it.group === 'today').map(row);
+    const earlierItems = items.filter((it) => it.group !== 'today').map(row);
+
+    const hasText = !!(c.text || '').trim();
+    const isInbox = c.screen === 'inbox';
+    const heard = c.heard || '';
+
+    return {
+      isCapture: !isInbox,
+      isInbox: isInbox,
+      text: c.text || '',
+      onType: (e) => this.upd({ text: e && e.target ? e.target.value : '' }),
+      onKey: (e) => {
+        if (e && e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          this.save();
+        }
+      },
+      chips: chips,
+      cantSave: !hasText,
+      saveBg: hasText ? '#2B44C0' : '#C5CAC2',
+      saveColor: hasText ? '#FFFFFF' : '#3F4844',
+      save: () => this.save(),
+      recent: recent,
+      noRecent: items.length === 0,
+      count: String(items.length),
+      todayItems: todayItems,
+      earlierItems: earlierItems,
+      hasToday: todayItems.length > 0,
+      hasEarlier: earlierItems.length > 0,
+      inboxEmpty: items.length === 0,
+      toInbox: () => this.upd({ screen: 'inbox' }),
+      toCapture: () => this.upd({ screen: 'capture' }),
+      capAria: isInbox ? 'false' : 'page',
+      inAria: isInbox ? 'page' : 'false',
+      tabCapBg: isInbox ? 'transparent' : '#E3E7F8',
+      tabCapColor: isInbox ? '#4E5753' : '#22358F',
+      tabInBg: isInbox ? '#E3E7F8' : 'transparent',
+      tabInColor: isInbox ? '#22358F' : '#4E5753',
+      showToast: !!c.toastId && !c.listening,
+      undo: () => {
+        const now = this.cur();
+        if (!now.toastId) return;
+        if (this.toastTimer) clearTimeout(this.toastTimer);
+        this.upd({
+          items: (now.items || []).filter((x) => x.id !== now.toastId),
+          toastId: '',
+          screen: 'capture',
+          text: now.lastText || '',
+          when: now.lastWhen || '',
+          energy: now.lastEnergy || ''
+        });
+      },
+      listening: !!c.listening,
+      voiceStatus: heard ? 'Got it. Save, or cancel and try again.' : 'Listening',
+      heardText: heard || 'Speak now…',
+      heardColor: heard ? '#FFFFFF' : '#9AA19C',
+      noHeard: !heard,
+      voiceSaveBg: heard ? '#2B44C0' : '#4E5753',
+      startVoice: () => {
+        this.upd({ listening: true, heard: '' });
+        if (this.voiceTimer) clearTimeout(this.voiceTimer);
+        this.voiceTimer = setTimeout(() => {
+          const now = this.cur();
+          if (now.listening && !now.heard) this.upd({ heard: 'Ask Chetan for the DR update' });
+        }, 1400);
+      },
+      cancelVoice: () => {
+        if (this.voiceTimer) clearTimeout(this.voiceTimer);
+        this.upd({ listening: false, heard: '' });
+      },
+      saveVoice: () => {
+        const text = (this.cur().heard || '').trim();
+        if (!text) return;
+        if (this.voiceTimer) clearTimeout(this.voiceTimer);
+        this.addItem(text, { listening: false, heard: '' });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
