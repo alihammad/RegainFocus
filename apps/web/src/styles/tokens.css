@@ -1,0 +1,76 @@
+/* Design tokens from docs/DESIGN.md. This is the only file that may contain colour values. */
+
+:root {
+  /* Colour */
+  --color-ground: #f1f2ee;
+  --color-surface: #fbfbf9;
+  --color-ink: #1c211f;
+  --color-ink-2: #4e5753;
+  --color-ink-3: #3f4844;
+  --color-line: #d6d9d2;
+  --color-control-border: #c5cac2;
+  --color-chip: #e4e7e0;
+  --color-muted-panel: #ebede7;
+  --color-dashed: #8f9792;
+  --color-blue: #2b44c0;
+  --color-blue-hover: #1c2e8a;
+  --color-blue-tint: #e3e7f8;
+  --color-blue-on-tint: #22358f;
+  --color-blue-soft: #9aa8ea;
+  --color-amber-tint: #f6e6cf;
+  --color-amber-text: #7a4100;
+  --color-amber-strong: #b35c00;
+  --color-dark: #1c211f;
+  --color-on-dark-muted: #d7dbd3;
+  --color-on-dark-accent: #8fa2ff;
+  --color-on-dark-link: #b9c4f5;
+  --color-scrim: rgba(28, 33, 31, 0.45);
+  --color-on-blue: #ffffff; /* text on --color-blue; the mockups use plain white */
+
+  /* Time ribbon: time already gone is a 135deg hatch of these two */
+  --color-hatch-a: #d3d7cf;
+  --color-hatch-b: #e4e7e0;
+
+  /* Typography */
+  --font-heading: 'Lexend', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Atkinson Hyperlegible', Verdana, system-ui, sans-serif;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 10px;
+  --space-5: 12px;
+  --space-6: 14px;
+  --space-7: 16px;
+  --space-8: 20px;
+  --space-9: 24px;
+  --space-10: 28px;
+  --space-11: 32px;
+  --space-12: 40px;
+
+  /* Sizes */
+  --touch-target: 44px;
+  --button-height-web: 56px;
+  --button-height-mobile: 60px;
+  --layout-max-width: 1280px;
+
+  /* Radii */
+  --radius-chip: 999px;
+  --radius-control: 10px;
+  --radius-button-web: 12px;
+  --radius-button-mobile: 16px;
+  --radius-panel: 16px;
+  --radius-focus-card-web: 24px;
+  --radius-focus-card-mobile: 22px;
+  --radius-sheet: 28px 28px 0 0;
+
+  /* Focus card: the app's signature, one per screen */
+  --focus-card-border: 2px solid var(--color-ink);
+  --focus-card-shadow-web: 8px 8px 0 var(--color-ink);
+  --focus-card-shadow-mobile: 6px 6px 0 var(--color-ink);
+
+  /* Keyboard focus ring */
+  --focus-ring: 3px solid var(--color-blue);
+  --focus-ring-offset: 2px;
+}
