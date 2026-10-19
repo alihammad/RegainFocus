@@ -1,0 +1,194 @@
+/* Desk shell (phase 1: capture input, To sort, a plain list per quadrant) and sign-in. */
+
+.w-app {
+  min-height: 100dvh;
+}
+.w-header {
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+.w-header-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-9);
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-11);
+}
+.w-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 20px;
+  white-space: nowrap;
+}
+.w-capture {
+  flex: 1 1 auto;
+}
+.w-capture-input {
+  width: 100%;
+  min-height: var(--touch-target);
+  box-sizing: border-box;
+  padding: 0 var(--space-7);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-button-web);
+  background: var(--color-ground);
+  color: var(--color-ink);
+  font-size: 16px;
+}
+.w-capture-input::placeholder {
+  color: var(--color-ink-2);
+  opacity: 1;
+}
+.w-notice {
+  max-width: var(--layout-max-width);
+  margin: 0 auto var(--space-7);
+}
+.w-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-11);
+  max-width: var(--layout-max-width);
+  margin: 0 auto;
+  padding: var(--space-11);
+}
+.w-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+.w-h1 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+.w-sort-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+.w-triage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  max-width: 420px;
+}
+.w-triage .btn-quiet {
+  min-height: 56px;
+  justify-content: flex-start;
+}
+
+/* Fixed matrix layout: urgent left (narrow), not urgent right (wide); important on top. */
+.w-matrix {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: var(--space-7);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .w-matrix {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.w-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+.w-quadrant {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-7) var(--space-8);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+}
+/* Empty quadrants shrink to a compact card; quadrants with tasks get the space. */
+.w-quadrant[data-empty='true'] {
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-8);
+  background: var(--color-muted-panel);
+}
+.w-h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 18px;
+}
+.w-count {
+  margin-left: auto;
+  color: var(--color-ink-2);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+}
+.w-rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.w-row {
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--color-line);
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+.w-row:first-child {
+  border-top: 0;
+}
+
+.w-app .toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-9);
+  width: min(480px, calc(100% - var(--space-11)));
+  transform: translateX(-50%);
+}
+
+/* Sign-in */
+.signin {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  max-width: 420px;
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-8);
+}
+.signin-button {
+  min-height: var(--button-height-web);
+  padding: 0 var(--space-9);
+  border-radius: var(--radius-button-web);
+  font-size: 18px;
+}
+.signin-dev {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-9);
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--color-line);
+}
+.signin-dev input {
+  min-height: var(--touch-target);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+}
+.signin-dev-actions {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+}

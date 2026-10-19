@@ -8,21 +8,29 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@fontsource/atkinson-hyperlegible": "^5.3.0",
     "@fontsource/lexend": "^5.3.0",
     "@regain/core": "workspace:*",
+    "@supabase/supabase-js": "^2.118.0",
+    "dexie": "^4.4.6",
+    "dexie-react-hooks": "^4.4.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@vite-pwa/assets-generator": "^2.0.0",
     "@vitejs/plugin-react": "^6.1.2",
     "vite": "^8.3.4",
+    "vite-plugin-pwa": "^2.0.0",
     "vitest": "^5.0.5"
   }
 }

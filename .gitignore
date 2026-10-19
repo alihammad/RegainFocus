@@ -8,3 +8,5 @@ supabase/.temp/
 supabase/.branches/
 coverage/
 supabase/.env
+test-results/
+playwright-report/

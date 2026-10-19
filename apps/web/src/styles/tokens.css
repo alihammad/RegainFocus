@@ -26,6 +26,7 @@
   --color-on-dark-link: #b9c4f5;
   --color-scrim: rgba(28, 33, 31, 0.45);
   --color-on-blue: #ffffff; /* text on --color-blue; the mockups use plain white */
+  --color-on-dark: #ffffff; /* text on --color-dark */
 
   /* Time ribbon: time already gone is a 135deg hatch of these two */
   --color-hatch-a: #d3d7cf;
@@ -64,6 +65,8 @@
   --radius-focus-card-web: 24px;
   --radius-focus-card-mobile: 22px;
   --radius-sheet: 28px 28px 0 0;
+
+  --shadow-toast: 0 10px 28px rgba(28, 33, 31, 0.28);
 
   /* Focus card: the app's signature, one per screen */
   --focus-card-border: 2px solid var(--color-ink);
