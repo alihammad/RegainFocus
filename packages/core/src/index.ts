@@ -4,3 +4,8 @@ export * from './rules/today';
 export * from './rules/triage';
 export * from './store/db';
 export * from './store/repository';
+export * from './sync/backoff';
+export * from './sync/engine';
+export * from './sync/mapping';
+export * from './sync/remote';
+export * from './sync/supabaseRemote';
