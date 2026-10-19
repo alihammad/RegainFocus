@@ -21,7 +21,32 @@ cp apps/web/.env.example apps/web/.env.local   # then paste the key
 pnpm dev             # http://127.0.0.1:5173
 ```
 
-Checks: `pnpm typecheck`, `pnpm lint`, `pnpm test`, `pnpm db:test`.
+Sign-in: Google needs credentials (see `supabase/.env.example`). Until then, the dev server shows a
+"Local development" email and password form on the sign-in screen. It is not in production builds.
+
+Resize the window below 768px wide to get the phone app; wider shows the desk app. Both use the same data.
+
+### Checks
+
+| Command                                    | What it runs                                                                    |
+| ------------------------------------------ | ------------------------------------------------------------------------------- |
+| `pnpm typecheck`, `pnpm lint`, `pnpm test` | Types, lint, unit tests (core and web)                                          |
+| `pnpm db:test`                             | pgTAP database tests (needs `pnpm db:start`)                                    |
+| `pnpm test:integration`                    | Core tests plus the Supabase adapter against the local database                 |
+| `pnpm --filter @regain/web test:e2e`       | Playwright against the real app: phone, desk, voice, offline PWA, accessibility |
+
+### Trying it on a real Android phone
+
+The service worker, microphone and install prompt need a secure origin, and `localhost` counts. With USB
+debugging on, forward the ports and open the app on the phone:
+
+```
+adb reverse tcp:5173 tcp:5173
+adb reverse tcp:54321 tcp:54321
+```
+
+Then open `http://localhost:5173` in Chrome on the phone. For the installed-app and offline behaviour, run
+`pnpm --filter @regain/web build && pnpm --filter @regain/web preview` and forward port 4173 instead.
 
 ## Moving to a hosted Supabase project
 

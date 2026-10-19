@@ -5,13 +5,17 @@ import { expect, type BrowserContext, type Page } from '@playwright/test';
 
 const repoRoot = resolve(import.meta.dirname, '../../..');
 
-function localSupabase(): { url: string; secret: string } {
+function localSupabase(): { url: string; secret: string; publishable: string } {
   const out = execSync('pnpm exec supabase status -o env', { cwd: repoRoot, encoding: 'utf8' });
   const value = (key: string) => out.match(new RegExp(`^${key}="(.*)"$`, 'm'))?.[1] ?? '';
-  return { url: value('API_URL'), secret: value('SECRET_KEY') };
+  return {
+    url: value('API_URL'),
+    secret: value('SECRET_KEY'),
+    publishable: value('PUBLISHABLE_KEY'),
+  };
 }
 
-const { url, secret } = localSupabase();
+const { url, secret, publishable } = localSupabase();
 export const admin: SupabaseClient = createClient(url, secret, { auth: { persistSession: false } });
 
 export interface TestUser {
@@ -43,6 +47,26 @@ export async function signIn(page: Page, user: TestUser): Promise<void> {
   await page.getByLabel('Email').fill(user.email);
   await page.getByLabel('Password').fill(user.password);
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+}
+
+/**
+ * Sign in without the UI, for the production build (which has no development form). The
+ * session is placed where supabase-js keeps it, before any page script runs.
+ */
+export async function injectSession(context: BrowserContext, user: TestUser): Promise<void> {
+  const client = createClient(url, publishable, { auth: { persistSession: false } });
+  const { data, error } = await client.auth.signInWithPassword({
+    email: user.email,
+    password: user.password,
+  });
+  if (error) throw error;
+  const key = `sb-${new URL(url).hostname.split('.')[0]}-auth-token`;
+  await context.addInitScript(
+    ([k, v]) => {
+      if (!localStorage.getItem(k!)) localStorage.setItem(k!, v!);
+    },
+    [key, JSON.stringify(data.session)],
+  );
 }
 
 /** Server-side view of a user's tasks, bypassing row-level security. */
