@@ -41,7 +41,12 @@ describe('tasksForToday', () => {
       task({ id: 'a', todayDate: '2026-10-19', todayOrder: 1 }),
       task({ id: 'old', todayDate: '2026-10-18', todayOrder: 1 }),
       task({ id: 'done', todayDate: '2026-10-19', todayOrder: 3, status: 'done' }),
-      task({ id: 'gone', todayDate: '2026-10-19', todayOrder: 4, deletedAt: '2026-10-19T01:00:00.000Z' }),
+      task({
+        id: 'gone',
+        todayDate: '2026-10-19',
+        todayOrder: 4,
+        deletedAt: '2026-10-19T01:00:00.000Z',
+      }),
     ];
     expect(tasksForToday(tasks, '2026-10-19').map((t) => t.id)).toEqual(['a', 'b']);
   });

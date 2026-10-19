@@ -4,11 +4,11 @@ Quick capture and an Eisenhower matrix for adults with ADHD. Read `CLAUDE.md`, t
 
 ## Layout
 
-| Path | What |
-| --- | --- |
-| `apps/web` | Vite + React PWA (mobile capture and the web app) |
+| Path            | What                                                      |
+| --------------- | --------------------------------------------------------- |
+| `apps/web`      | Vite + React PWA (mobile capture and the web app)         |
 | `packages/core` | Data model, local store, sync and rules. No React or DOM. |
-| `supabase` | Migrations, pgTAP tests and local config |
+| `supabase`      | Migrations, pgTAP tests and local config                  |
 
 ## Run it locally
 

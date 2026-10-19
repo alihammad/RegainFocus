@@ -26,7 +26,8 @@ export interface TaskRow {
 }
 
 const iso = (value: string): string => new Date(value).toISOString();
-const optIso = (value: string | null): string | undefined => (value === null ? undefined : iso(value));
+const optIso = (value: string | null): string | undefined =>
+  value === null ? undefined : iso(value);
 const opt = <T>(value: T | null): T | undefined => (value === null ? undefined : value);
 
 export function taskToRow(task: Task): TaskRow {

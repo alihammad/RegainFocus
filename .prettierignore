@@ -1,3 +1,5 @@
 docs/design/
 pnpm-lock.yaml
 supabase/.temp/
+docs/
+CLAUDE.md

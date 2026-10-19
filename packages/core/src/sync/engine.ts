@@ -27,7 +27,8 @@ export class SyncEngine {
     opts: SyncEngineOptions = {},
   ) {
     this.now = opts.now ?? Date.now;
-    this.isOnline = opts.isOnline ?? (() => (typeof navigator === 'undefined' ? true : navigator.onLine));
+    this.isOnline =
+      opts.isOnline ?? (() => (typeof navigator === 'undefined' ? true : navigator.onLine));
     this.backoff = opts.backoff ?? backoffMs;
     this.batchSize = opts.batchSize ?? 50;
   }
