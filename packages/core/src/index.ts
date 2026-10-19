@@ -9,3 +9,4 @@ export * from './sync/engine';
 export * from './sync/mapping';
 export * from './sync/remote';
 export * from './sync/supabaseRemote';
+export * from './model/uuid';

@@ -6,6 +6,12 @@ import type { OutboxEntry, RegainDb } from '../store/db';
 /** The sync pill: "Synced to web", "Saving… will sync", "Offline. Saved on this phone". */
 export type SyncState = 'synced' | 'pending' | 'offline';
 
+/** The one rule for the pill. Offline wins, even with nothing queued. */
+export function syncState(online: boolean, pending: number): SyncState {
+  if (!online) return 'offline';
+  return pending > 0 ? 'pending' : 'synced';
+}
+
 export interface SyncEngineOptions {
   now?: () => number;
   isOnline?: () => boolean;
@@ -34,8 +40,7 @@ export class SyncEngine {
   }
 
   async state(): Promise<SyncState> {
-    if (!this.isOnline()) return 'offline';
-    return (await this.db.outbox.count()) > 0 ? 'pending' : 'synced';
+    return syncState(this.isOnline(), await this.db.outbox.count());
   }
 
   /** Push everything that is due. Failed entries stay queued and back off; nothing is dropped. */

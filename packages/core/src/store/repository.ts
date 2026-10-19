@@ -1,6 +1,7 @@
 import type { Energy, Quadrant, Source, Task, When } from '../model/types';
 import { tasksForToday, todayStatus, type TodayStatus } from '../rules/today';
 import { triagePatch } from '../rules/triage';
+import { uuid } from '../model/uuid';
 import { outboxKey, type RegainDb } from './db';
 
 export interface CaptureInput {
@@ -42,7 +43,7 @@ export class TaskRepository {
   ) {
     this.userId = opts.userId;
     this.now = opts.now ?? (() => new Date());
-    this.newId = opts.newId ?? (() => crypto.randomUUID());
+    this.newId = opts.newId ?? uuid;
   }
 
   private iso(): string {
